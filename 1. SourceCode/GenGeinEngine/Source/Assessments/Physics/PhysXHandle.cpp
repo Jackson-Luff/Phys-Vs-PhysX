@@ -10,7 +10,6 @@
 #include "PhysXComps\Particles\ParticleFluidEmitter.h"
 #include "PhysXComps\Player\PhysXPlayerController.h"
 #include "PhysXComps\CollisionCallback.h"
-#include "PhysXComps\PhysXCloth.h"
 #include "PhysXHandle.h"
 
 using namespace RagDoll;
@@ -20,12 +19,15 @@ PhysXHandle::PhysXHandle()
 
 PhysXHandle::~PhysXHandle()
 {
-	m_planeInst->Shutdown();
-	m_planeInst = NULL;
-	m_sphereInst->Shutdown();
-	m_sphereInst = NULL;
-	m_boxInst->Shutdown();
-	m_boxInst = NULL;
+	m_pPlaneModel->Shutdown();
+	m_pPlaneModel = NULL;
+
+	m_pSphereModel->Shutdown();
+	m_pSphereModel = NULL;
+
+	m_pBoxModel->Shutdown();
+	m_pBoxModel = NULL;
+
 	m_player->Shutdown();
 	m_player = NULL;
 
@@ -38,20 +40,17 @@ PhysXHandle::~PhysXHandle()
 
 void PhysXHandle::StartUp()
 {
-	m_sphereInst = new FBXModel();
-	m_sphereInst->LoadFBX("PhysX", "Data/Models/sphere.fbx", FBXFile::UNITS_CENTIMETER);
+	m_pPlaneModel = new FBXModel();
+	m_pPlaneModel->LoadFBX("PhysX", "Data/Models/plane.fbx", FBXFile::UNITS_CENTIMETER);
 
-	m_planeInst = new FBXModel();
-	m_planeInst->LoadFBX("PhysX", "Data/Models/plane.fbx", FBXFile::UNITS_CENTIMETER);
+	m_pSphereModel = new FBXModel();
+	m_pSphereModel->LoadFBX("PhysX", "Data/Models/sphere.fbx", FBXFile::UNITS_CENTIMETER);
 
-	m_boxInst = new FBXModel();
-	m_boxInst->LoadFBX("PhysX", "Data/Models/cube.fbx", FBXFile::UNITS_CENTIMETER);
+	m_pBoxModel = new FBXModel();
+	m_pBoxModel->LoadFBX("PhysX", "Data/Models/cube.fbx", FBXFile::UNITS_CENTIMETER);
 
-	m_capsuleInst = new FBXModel();
-	m_capsuleInst->LoadFBX("PhysX", "Data/Models/capsule.fbx", FBXFile::UNITS_CENTIMETER);
-
-	m_fluidInst = new FBXModel();
-	m_fluidInst->LoadFBX("Fluid", "Data/Models/sphere.fbx", FBXFile::UNITS_CENTIMETER);
+	m_pCapsuleModel = new FBXModel();
+	m_pCapsuleModel->LoadFBX("PhysX", "Data/Models/capsule.fbx", FBXFile::UNITS_CENTIMETER);
 
 	m_pParticleEmitter = nullptr;
 	m_player = nullptr;
@@ -341,7 +340,7 @@ void PhysXHandle::AddFluidSimWithContainer(const PxVec3 a_position)
 		m_pPhysicsScene->addActor(*pf);
 	
 		m_pParticleEmitter = new ParticleFluidEmitter(maxParticles,
-			a_position + PxVec3(0, 3, 1), pf, 0.025f, m_fluidInst);
+			a_position + PxVec3(0, 3, 1), pf, 0.025f, m_pSphereModel);
 
 		m_pParticleEmitter->SetStartVelocityRange(
 			-0.001f, -350.0f, -0.001f, 0.001f, -350.0f, -0.001f);
@@ -477,8 +476,8 @@ void PhysXHandle::RenderPlane(PxShape* a_shape, PxRigidActor& a_actor)
 {
 	glm::vec3 p(55.0f, 0, 0);
 	glm::vec3 s(2.5f, 1, 2.5f);
-	m_planeInst->SetLocalTransform(glm::translate(p) * glm::scale(s));
-	m_planeInst->Render();
+	m_pPlaneModel->SetLocalTransform(glm::translate(p) * glm::scale(s));
+	m_pPlaneModel->Render();
 }
 
 void PhysXHandle::RenderSphere(PxShape* a_shape, PxRigidActor& a_actor)
@@ -500,8 +499,8 @@ void PhysXHandle::RenderSphere(PxShape* a_shape, PxRigidActor& a_actor)
 		m.column2.x, m.column2.y, m.column2.z, m.column2.w,
 		m.column3.x, m.column3.y, m.column3.z, m.column3.w);
 
-	m_sphereInst->SetLocalTransform(M);
-	m_sphereInst->Render();
+	m_pSphereModel->SetLocalTransform(M);
+	m_pSphereModel->Render();
 }
 
 void PhysXHandle::RenderBox(PxShape* a_shape, PxRigidActor& a_actor)
@@ -525,8 +524,8 @@ void PhysXHandle::RenderBox(PxShape* a_shape, PxRigidActor& a_actor)
 		m.column2.x, m.column2.y, m.column2.z, m.column2.w,
 		m.column3.x, m.column3.y, m.column3.z, m.column3.w);
 
-	m_boxInst->SetLocalTransform(M * glm::scale(size));
-	m_boxInst->Render();
+	m_pBoxModel->SetLocalTransform(M * glm::scale(size));
+	m_pBoxModel->Render();
 }
 
 void PhysXHandle::RenderCapsule(PxShape* a_shape, PxRigidActor& a_actor)
@@ -550,8 +549,8 @@ void PhysXHandle::RenderCapsule(PxShape* a_shape, PxRigidActor& a_actor)
 		m.column3.x, m.column3.y, m.column3.z, m.column3.w);
 
 	// FIX
-	m_capsuleInst->SetLocalTransform(M);
-	m_capsuleInst->Render();
+	m_pCapsuleModel->SetLocalTransform(M);
+	m_pCapsuleModel->Render();
 }
 
 PxFilterFlags FilterShader(PxFilterObjectAttributes a_a0, PxFilterData a_fd0,

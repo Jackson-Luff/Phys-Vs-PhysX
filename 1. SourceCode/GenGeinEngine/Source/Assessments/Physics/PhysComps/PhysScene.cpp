@@ -25,20 +25,29 @@ PhysScene::PhysScene()
 {}
 
 PhysScene::~PhysScene()
-{}
+{
+	m_pPlaneModel->Shutdown();
+	m_pPlaneModel = NULL;
+
+	m_pSphereModel->Shutdown();
+	m_pSphereModel = NULL;
+
+	m_pBoxModel->Shutdown();
+	m_pBoxModel = NULL;
+}
 
 PhysScene::PhysScene(const glm::vec3 a_gravity) : PhysScene()
 {
 	m_gravity = a_gravity;
 
-	m_sphereInst = new FBXModel();
-	m_sphereInst->LoadFBX("Phys", "Data/Models/sphere.fbx", FBXFile::UNITS_CENTIMETER);
+	m_pSphereModel = new FBXModel();
+	m_pSphereModel->LoadFBX("Phys", "Data/Models/sphere.fbx", FBXFile::UNITS_CENTIMETER);
 
-	m_planeInst = new FBXModel();
-	m_planeInst->LoadFBX("Phys", "Data/Models/plane.fbx", FBXFile::UNITS_CENTIMETER);
+	m_pPlaneModel = new FBXModel();
+	m_pPlaneModel->LoadFBX("Phys", "Data/Models/plane.fbx", FBXFile::UNITS_CENTIMETER);
 
-	m_boxInst = new FBXModel();
-	m_boxInst->LoadFBX("Phys", "Data/Models/cube.fbx", FBXFile::UNITS_CENTIMETER);
+	m_pBoxModel = new FBXModel();
+	m_pBoxModel->LoadFBX("Phys", "Data/Models/cube.fbx", FBXFile::UNITS_CENTIMETER);
 }
 
 void PhysScene::Reset()
@@ -139,15 +148,6 @@ void PhysScene::RemoveActor(PhysActor* a_actor)
 
 void PhysScene::RemoveAllActors()
 {
-	m_planeInst->Shutdown();
-	m_planeInst = NULL;
-
-	m_sphereInst->Shutdown();
-	m_sphereInst = NULL;
-
-	m_boxInst->Shutdown();
-	m_boxInst = NULL;
-
 	for (auto& it : m_actors)
 	{
 		delete it;
@@ -170,8 +170,8 @@ void PhysScene::Render()
 		{
 			PhysPlane* plane = dynamic_cast<PhysPlane*>(m_actors[i]);
 			glm::mat4 t = glm::translate(glm::vec3(-55.0f, 0, 0)) * glm::scale(glm::vec3(2.5f, 1, 2.5f));
-			m_planeInst->SetLocalTransform(t);
-			m_planeInst->Render();
+			m_pPlaneModel->SetLocalTransform(t);
+			m_pPlaneModel->Render();
 		}
 		else if (m_actors[i]->GetShapeID() == ShapeType::SPHERE)
 		{
@@ -180,16 +180,16 @@ void PhysScene::Render()
 			glm::mat4 r = glm::rotate(sphere->GetRotation().x, glm::vec3(1,0,0));
 			r *= glm::rotate(sphere->GetRotation().y, glm::vec3(0,1,0));
 			r *= glm::rotate(sphere->GetRotation().z, glm::vec3(0,0,1));
-			glm::mat4 t = glm::translate(sphere->GetPosition()) * glm::scale(glm::vec3(sphere->GetRadius()));
-			m_sphereInst->SetLocalTransform(t);
-			m_sphereInst->Render();
+			glm::mat4 t = glm::translate(sphere->GetPosition()) *r* glm::scale(glm::vec3(sphere->GetRadius()));
+			m_pSphereModel->SetLocalTransform(t);
+			m_pSphereModel->Render();
 		}
 		else if (m_actors[i]->GetShapeID() == ShapeType::AABB)
 		{
 			PhysAABB* box = dynamic_cast<PhysAABB*>(m_actors[i]);
 			glm::mat4 t = glm::translate(box->GetPosition()) * glm::scale(box->GetSize());
-			m_boxInst->SetLocalTransform(t);
-			m_boxInst->Render();
+			m_pBoxModel->SetLocalTransform(t);
+			m_pBoxModel->Render();
 		}
 		
 		float dist = length(abs(m_actors[i]->GetPosition()));

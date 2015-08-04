@@ -83,7 +83,7 @@ void RigidBody::ApplyTorque(float a_torque, glm::vec3 a_dir)
 	if (m_bodyID == BodyType::STATIC)
 		return;
 
-	m_angularVelocity += ((a_torque * a_dir) /m_mass);
+	m_angularVelocity += (a_torque * a_dir) / m_mass;
 }
 
 void RigidBody::ResetPosition()

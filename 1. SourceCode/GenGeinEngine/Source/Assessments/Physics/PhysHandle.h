@@ -9,6 +9,7 @@ public:
 	PhysHandle();
 	~PhysHandle();
 
+	void SetUpInstObjects(FBXModel* a_plane, FBXModel* a_sphere, FBXModel* a_box);
 	void StartUp();
 	void ShutDown();
 	void Update(double a_dt);

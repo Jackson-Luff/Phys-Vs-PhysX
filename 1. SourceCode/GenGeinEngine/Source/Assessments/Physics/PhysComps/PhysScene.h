@@ -3,7 +3,6 @@
 #include <glm/glm.hpp>
 
 class PhysActor;
-class FBXModel;
 
 class PhysScene
 {
@@ -53,9 +52,9 @@ public:
 private:
 	glm::vec3 m_gravity;
 	std::vector<PhysActor*> m_actors;
-
-	// Instances of re-used models:
-	FBXModel* m_planeInst;
-	FBXModel* m_sphereInst;
-	FBXModel* m_boxInst;
+	
+	// Inst object references:
+	FBXModel* m_pPlaneModel;
+	FBXModel* m_pSphereModel;
+	FBXModel* m_pBoxModel;
 };

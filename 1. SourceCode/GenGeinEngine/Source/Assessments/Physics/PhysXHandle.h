@@ -12,7 +12,6 @@ using namespace physx;
 class CollisionCallback;
 class ParticleFluidEmitter;
 class PhysXPlayerController;
-class PhysXCloth;
 class FBXModel;
 
 class PhysXHandle
@@ -134,10 +133,10 @@ private:
 
 	std::vector<PxRigidActor*> m_physXActors;
 	std::vector<PxArticulation*> m_physXRagDollActors;
-	// Instances of re-used models:
-	FBXModel* m_fluidInst;
-	FBXModel* m_sphereInst;
-	FBXModel* m_planeInst;
-	FBXModel* m_boxInst;
-	FBXModel* m_capsuleInst;
+
+	// Inst object references:
+	FBXModel* m_pPlaneModel;
+	FBXModel* m_pSphereModel;
+	FBXModel* m_pBoxModel;
+	FBXModel* m_pCapsuleModel;
 };

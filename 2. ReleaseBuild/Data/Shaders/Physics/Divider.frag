@@ -51,10 +51,10 @@ void main()
 	float dist = length(target - vPosition.xyz);
 	
 	// Almost a smoke-like effect
-	dist = dist * cos(seed - t);
+	dist = dist - sin(seed - t);
 
 	// Colouring
-	outRGB = outRGB * vec3(0.1, 1.0, 1.0) * dist;
-	outRGB = outRGB * vec3(0.3);
+	outRGB = outRGB * vec3(0.1, 1.0, 1.0) * 1-dist;
+		
 	gl_FragColor = vec4(outRGB,0.5);
 }
