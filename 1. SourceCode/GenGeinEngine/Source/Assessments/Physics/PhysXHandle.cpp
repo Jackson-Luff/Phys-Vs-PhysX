@@ -4,11 +4,13 @@
 #include "Engine\Objects\FBXModel.h"
 #include "Engine\Cameras\BaseCamera.h"
 #include "Engine\Input\InputHandle.h"
+
 #include "PhysXComps\MemAlloc.h"
 #include "PhysXComps\PhysXRagdoll.h"
 #include "PhysXComps\Particles\ParticleFluidEmitter.h"
 #include "PhysXComps\Player\PhysXPlayerController.h"
 #include "PhysXComps\CollisionCallback.h"
+#include "PhysXComps\PhysXCloth.h"
 #include "PhysXHandle.h"
 
 using namespace RagDoll;
@@ -53,6 +55,7 @@ void PhysXHandle::StartUp()
 
 	m_pParticleEmitter = nullptr;
 	m_player = nullptr;
+	//m_pCloth = nullptr;
 	m_pCollisionCallback = new CollisionCallback();
 
 	SetUpPhysX();
@@ -125,6 +128,11 @@ void PhysXHandle::Update(const double a_dt)
 			
 		}
 	}
+
+	//if (m_pCloth)
+	//{
+	//	m_pCloth->Update(a_dt);
+	//}
 }
 
 void PhysXHandle::Render()
@@ -172,6 +180,11 @@ void PhysXHandle::Render()
 	{
 		m_pParticleEmitter->RenderParticles();
 	}
+
+	//if (m_pCloth)
+	//{
+	//	m_pCloth->Render();
+	//}
 }
 
 void SetActorAsTrigger(PxRigidActor* a_actor)
@@ -663,8 +676,11 @@ void PhysXHandle::SetUpEnvironment()
 	BuildRagdollSkit();
 
 	m_player = new PhysXPlayerController();
-	m_player->SetUp(m_pPhysicsScene, m_pPhysics, PxExtendedVec3(60, 17.5f, 50));
+	m_player->SetUp(m_pPhysics, m_pPhysicsScene,PxExtendedVec3(60, 17.5f, 50));
 	SetupFilter(m_player->GetActor(), FilterGroup::ePLAYER, FilterGroup::ePLATFORM);
+
+	//m_pCloth = new PhysXCloth();
+	//m_pCloth->SetUp(m_pPhysics, m_pPhysicsScene, PxVec3(40), 40, 40, 0.2f);
 }
 
 void PhysXHandle::UpdatePhysX(const double a_dt)

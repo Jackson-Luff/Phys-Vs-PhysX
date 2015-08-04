@@ -88,6 +88,20 @@ void PhysScene::Update(const double a_dt)
 void PhysScene::DebugScene()
 {}
 
+void PhysScene::CheckForCollision(PhysActor* a_actorA, PhysActor* a_actorB)
+{
+	if (a_actorA->GetBodyID() == BodyType::STATIC &&
+		a_actorB->GetBodyID() == BodyType::STATIC)
+		return;
+
+	int funcIndex = ((int)a_actorA->GetShapeID() * (int)ShapeType::NUMBER_OF_SHAPES) + (int)a_actorB->GetShapeID();
+	fn collFuncPtr = collFuncArray[funcIndex];
+	if (collFuncPtr != NULL)
+	{
+		collFuncPtr(a_actorA, a_actorB);
+	}
+}
+
 void PhysScene::AddActor(PhysActor* a_actor)
 {
 	if (std::find(m_actors.begin(), m_actors.end(), a_actor) == m_actors.end())

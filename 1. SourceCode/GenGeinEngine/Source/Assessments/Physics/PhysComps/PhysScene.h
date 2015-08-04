@@ -17,6 +17,7 @@ public:
 	void Update(const double a_dt);
 	void DebugScene();
 
+	void CheckForCollision(PhysActor* a_actorA, PhysActor* a_actorB);
 	void AddActor(PhysActor* a_actor);
 	void RemoveActor(PhysActor* a_actor);
 	void RemoveAllActors();
@@ -54,7 +55,7 @@ private:
 	std::vector<PhysActor*> m_actors;
 
 	// Instances of re-used models:
-	FBXModel* m_planeInst; 
+	FBXModel* m_planeInst;
 	FBXModel* m_sphereInst;
 	FBXModel* m_boxInst;
 };

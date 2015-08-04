@@ -11,7 +11,7 @@ public:
 	PhysXPlayerController();
 	~PhysXPlayerController();
 
-	void SetUp(PxScene* a_scene, PxPhysics* a_physics, const PxExtendedVec3 a_position);
+	void SetUp(PxPhysics* a_physics, PxScene* a_scene, const PxExtendedVec3 a_position);
 	void Shutdown();
 
 	void Update(const PxVec3 a_gravity, const float a_dt);

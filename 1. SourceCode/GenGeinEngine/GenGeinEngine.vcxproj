@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="..\Dependencies\gl_core\gl_core_4_4.cpp" />
     <ClCompile Include="..\Dependencies\gizmos\AIE\Gizmos.cpp" />
+    <ClCompile Include="Source\Assessments\Physics\PhysXComps\PhysXCloth.cpp" />
     <ClCompile Include="Source\Assessments\Physics\PhysXComps\CollisionCallback.cpp" />
     <ClCompile Include="Source\Assessments\Particles\Particles.cpp" />
     <ClCompile Include="Source\Assessments\Physics\PhysComps\Assets\PhysAABB.cpp" />
@@ -46,6 +47,7 @@
     <ClCompile Include="Source\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Assessments\Physics\PhysXComps\PhysXCloth.h" />
     <ClInclude Include="Source\Assessments\Physics\PhysXComps\CollisionCallback.h" />
     <ClInclude Include="Source\Assessments\Particles\Particles.h" />
     <ClInclude Include="Source\Assessments\Physics\PhysComps\Assets\PhysAABB.h" />
@@ -146,7 +148,7 @@
       </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy /Y $(SolutionDir)Data $(SolutionDir)\$(ConfigurationName)\Data\</Command>
+      <Command>xcopy /Y $(SolutionDir)Data $(SolutionDir)\Debug\Data\</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Copy Data</Message>

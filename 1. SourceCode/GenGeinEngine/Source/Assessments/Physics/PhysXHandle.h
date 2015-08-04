@@ -8,10 +8,12 @@
 
 using namespace physx;
 
-class FBXModel;
+
+class CollisionCallback;
 class ParticleFluidEmitter;
 class PhysXPlayerController;
-class CollisionCallback;
+class PhysXCloth;
+class FBXModel;
 
 class PhysXHandle
 {
@@ -90,14 +92,14 @@ private:
 		PxRigidActor* actor;
 	};
 
-	PxArticulation* MakeRagDoll(PxPhysics* a_physics, RagDoll::RagDollNode** a_nodeArray,
-		PxTransform a_worldPos, float a_scaleFactor, PxMaterial* a_ragdollMaterial);
-
 	PxRigidActor* AddBox(const PxTransform a_pose, const PxVec3 a_size, const float a_density, PhysXActorType a_type, const bool a_trigger = false);
 	PxRigidActor* AddSphere(const PxTransform a_pose, const float a_radius, const float a_density, PhysXActorType a_type, const bool a_trigger = false);
 	PxRigidActor* AddPlane(const PxTransform a_pose, PhysXActorType a_type);
 	void AddRagDoll(const PxTransform a_pose);
 	void AddFluidSimWithContainer(const PxVec3 a_position);
+
+	PxArticulation* MakeRagDoll(PxPhysics* a_physics, RagDoll::RagDollNode** a_nodeArray,
+		PxTransform a_worldPos, float a_scaleFactor, PxMaterial* a_ragdollMaterial);
 
 	void RenderWidget(PxShape* a_shape, PxRigidActor& a_actor);
 	void RenderPlane(PxShape* a_shape, PxRigidActor& a_actor);
@@ -126,12 +128,12 @@ private:
 
 	PxDefaultErrorCallback m_defaultErrorCallBack;
 	PxDefaultAllocator m_defaultAllocatorCallBack;
+	
+	PhysXPlayerController* m_player;
+	//PhysXCloth* m_pCloth;
 
 	std::vector<PxRigidActor*> m_physXActors;
 	std::vector<PxArticulation*> m_physXRagDollActors;
-
-	PhysXPlayerController* m_player;
-
 	// Instances of re-used models:
 	FBXModel* m_fluidInst;
 	FBXModel* m_sphereInst;

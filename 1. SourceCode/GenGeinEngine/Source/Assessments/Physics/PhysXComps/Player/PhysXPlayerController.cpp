@@ -13,7 +13,7 @@ PhysXPlayerController::~PhysXPlayerController()
 {
 }
 
-void PhysXPlayerController::SetUp(PxScene* a_scene, PxPhysics* a_physics, const PxExtendedVec3 a_position)
+void PhysXPlayerController::SetUp(PxPhysics* a_physics, PxScene* a_scene, const PxExtendedVec3 a_position)
 {
 	m_pHitReport = new ControllerHitReport();
 	m_pCharacterManager = PxCreateControllerManager(*a_scene);
@@ -70,14 +70,16 @@ void PhysXPlayerController::Update(const PxVec3 a_gravity, const float a_dt)
 	m_pHitReport->ClearPlayerContactNormal();
 	
 	// Set up the movement velocity
-	PxVec3 playerVel = PxVec3(0);
+	glm::vec3 playerVel = glm::vec3(0);
 	glm::vec4 r = Input::Camera::GetRight();
 	glm::vec4 f = Input::Camera::GetForward();
-	playerVel += PxVec3(r.x, r.y, r.z) * -m_velocity.x; // Horis move
-	playerVel += PxVec3(f.x, f.y, f.z) * m_velocity.y; // Vert move
+	playerVel += glm::vec3(r) * -m_velocity.x; // Horis move
+	playerVel += glm::vec3(f) * m_velocity.y; // Vert move
 
 	if (Input::Keyboard::isKeyDown(KEY_W))
 		playerVel *= 4.0f;
+	else if (Input::Keyboard::isKeyDown(KEY_S))
+		playerVel *= -4.0f;
 	else
 		playerVel *= 0.0f;
 
@@ -88,5 +90,5 @@ void PhysXPlayerController::Update(const PxVec3 a_gravity, const float a_dt)
 	PxQuat rotation(0, PxVec3(0,1,0));
 	
 	// Move the Controller
-	m_pPlayerController->move(rotation.rotate(playerVel), minDistance, a_dt, filter);
+	m_pPlayerController->move(rotation.rotate(PxVec3(playerVel.x, playerVel.y, playerVel.z)), minDistance, a_dt, filter);
 }
